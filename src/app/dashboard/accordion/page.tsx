@@ -34,7 +34,7 @@ export default function AccordionDemo() {
     },
   ];
   return (
-    <Accordion type="single" className="w-full">
+    <Accordion type="single" collapsible className="w-full">
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionTrigger>{item.question}</AccordionTrigger>
