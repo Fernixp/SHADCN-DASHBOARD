@@ -22,6 +22,7 @@ const links = [
   { name: "Menu Bar", href: "menu-bar" },
   { name: "Input OTP", href: "input-otp" },
   { name: "Progress Bar", href: "progress" },
+  { name: "sheet", href: "sheet" },
 
 ].sort((a, b) => a.name.localeCompare(b.name));
 
