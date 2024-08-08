@@ -26,12 +26,12 @@ const randomEmail = (clientName: string) => {
 
 export const payments: Payment[] = Array.from({ length: 100 }, (_) => {
   const randomName = uniqueNamesGenerator(config);
-
+  const segundoNombre  = uniqueNamesGenerator(config)
   return {
     id: uuidV4(),
     amount: Math.floor(Math.random() * 10000) / 100,
     status: randomStatus(),
-    clientName: randomName,
-    email: randomEmail(randomName.toLowerCase()),
+    clientName: randomName + ' ' + segundoNombre,
+    email: randomEmail(segundoNombre.toLowerCase()),
   };
 });

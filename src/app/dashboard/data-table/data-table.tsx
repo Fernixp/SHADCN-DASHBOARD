@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import {
   ColumnDef,
@@ -8,8 +9,16 @@ import {
   getPaginationRowModel,
   SortingState,
   getSortedRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -18,9 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -30,22 +39,57 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const [currenStatus, setCurrenStatus] = useState("all");
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
     <>
+      <div className="flex items-center py-4 justify-between">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Select
+          value={currenStatus}
+          onValueChange={(value: string) => {
+              setCurrenStatus(value);
+            table.getColumn("status")?.setFilterValue(value !== 'all' ? value : undefined);
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="success">Success</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="failed">Failed</SelectItem>
+            <SelectItem value="processing">Processing</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

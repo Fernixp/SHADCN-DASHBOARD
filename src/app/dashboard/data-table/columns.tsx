@@ -61,7 +61,7 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => {
       const variantMap = {
         pending: "secondary",
-        processing: "secondary",
+        processing:"secondary",
         success: "success",
         failed: "destructive",
       };
