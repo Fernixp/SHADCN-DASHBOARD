@@ -26,6 +26,7 @@ const links = [
   { name: "skeleton", href: "skeleton" },
   { name: "slider", href: "slider" },
   { name: "sonner", href: "sonner" },
+  { name: "Toast", href: "toast" },
 
 ].sort((a, b) => a.name.localeCompare(b.name));
 
