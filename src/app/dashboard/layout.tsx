@@ -3,6 +3,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import ModeToggle from "./theme/page";
 
 const links = [
   { name: "accordion", href: "accordion" },
@@ -29,7 +30,7 @@ const links = [
   { name: "Toast", href: "toast" },
   { name: "tabs", href: "tabs" },
   { name: "data table", href: "data-table" },
-
+  { name: "theme", href: "theme" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export default function DashboardLayout({
@@ -116,7 +117,9 @@ export default function DashboardLayout({
                 </span>
               </a>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              {/* Theme*/}
+              <ModeToggle/>
               {/* User Avatar */}
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
