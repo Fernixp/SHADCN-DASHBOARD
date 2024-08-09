@@ -79,18 +79,17 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const isSelected =
-    table.getFilteredSelectedRowModel().rows.length > 0
+  const isSelected = table.getFilteredSelectedRowModel().rows.length > 0;
 
   const handleEliminarIDS = () => {
-    const newIdsToDelete : any = [];
+    const newIdsToDelete: any = [];
     table.getSelectedRowModel().rows.forEach((row) => {
-        //Aqui cambiar por id en lugar de nombre al mandar al backend
-        const id = (row.original as Payment).clientName //row.original.id
-      newIdsToDelete.push(id)
+      //Aqui cambiar por id en lugar de nombre al mandar al backend
+      const id = (row.original as Payment).clientName; //row.original.id
+      newIdsToDelete.push(id);
     });
-    setIdsToDelete(newIdsToDelete)
-    console.table( newIdsToDelete);
+    setIdsToDelete(newIdsToDelete);
+    console.table(newIdsToDelete);
   };
   return (
     <>
@@ -107,7 +106,7 @@ export function DataTable<TData, TValue>({
           <Button
             variant={"destructive"}
             onClick={() => {
-              handleEliminarIDS()
+              handleEliminarIDS();
             }}
           >
             Eliminar
@@ -216,7 +215,22 @@ export function DataTable<TData, TValue>({
           {table.getFilteredSelectedRowModel().rows.length} de{" "}
           {table.getFilteredRowModel().rows.length} fila(s) seleccionados.
         </div>
-        <div>
+        <div className="flex">
+          <Select
+            onValueChange={(value) => {
+              table.setPageSize(+value);
+            }}
+          >
+            <SelectTrigger className="w-[70px]">
+              <SelectValue placeholder="10" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+              <SelectItem value="100">100</SelectItem>
+            </SelectContent>
+          </Select>
           <Button
             variant="outline"
             size="sm"
