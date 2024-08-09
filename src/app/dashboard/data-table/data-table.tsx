@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   ColumnDef,
@@ -38,6 +38,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Payment } from "@/data/payments.data";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -55,6 +56,10 @@ export function DataTable<TData, TValue>({
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
+  const [rowSelection, setRowSelection] = useState({});
+
+  const [idsToDelete, setIdsToDelete] = useState([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -65,13 +70,28 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
     },
   });
 
+  const isSelected =
+    table.getFilteredSelectedRowModel().rows.length > 0
+
+  const handleEliminarIDS = () => {
+    const newIdsToDelete : any = [];
+    table.getSelectedRowModel().rows.forEach((row) => {
+        //Aqui cambiar por id en lugar de nombre al mandar al backend
+        const id = (row.original as Payment).clientName //row.original.id
+      newIdsToDelete.push(id)
+    });
+    setIdsToDelete(newIdsToDelete)
+    console.table( newIdsToDelete);
+  };
   return (
     <>
       <div className="flex items-center py-4 justify-between gap-2">
@@ -83,6 +103,16 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {isSelected && (
+          <Button
+            variant={"destructive"}
+            onClick={() => {
+              handleEliminarIDS()
+            }}
+          >
+            Eliminar
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -99,7 +129,7 @@ export function DataTable<TData, TValue>({
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value: string) =>
+                    onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
                     }
                   >
@@ -180,23 +210,30 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
+          {table.getFilteredRowModel().rows.length} fila(s) seleccionados.
+        </div>
+        <div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </>
   );

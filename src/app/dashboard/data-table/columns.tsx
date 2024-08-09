@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Payment } from "@/data/payments.data";
 import { ColumnDef, SortDirection } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { ArrowUpDown, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,20 +15,41 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
-
+import { Checkbox } from "@/components/ui/checkbox";
 // This type is used to define the shape of our data.
 
-const SortedIcon = ({isSorted} : {isSorted: false | SortDirection})=>{
-
-  if (isSorted === 'asc') {
-    return <ChevronUpIcon className='h-4 w-4' />
+const SortedIcon = ({ isSorted }: { isSorted: false | SortDirection }) => {
+  if (isSorted === "asc") {
+    return <ChevronUpIcon className="h-4 w-4" />;
   }
-  if( isSorted === 'desc'){
-    return <ChevronDownIcon className="h-4 w-4 " />
+  if (isSorted === "desc") {
+    return <ChevronDownIcon className="h-4 w-4 " />;
   }
-  return <ArrowUpDown className="ml-2 h-4 w-4" />
-}
+  return <ArrowUpDown className="ml-2 h-4 w-4" />;
+};
 export const columns: ColumnDef<Payment>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "clientName",
     header: ({ column }) => {
@@ -39,9 +60,9 @@ export const columns: ColumnDef<Payment>[] = [
           className="w-full"
         >
           Nombre
-          <SortedIcon isSorted = {column.getIsSorted()} />
+          <SortedIcon isSorted={column.getIsSorted()} />
         </Button>
-      )
+      );
     },
   },
   {
@@ -54,14 +75,14 @@ export const columns: ColumnDef<Payment>[] = [
           className="w-full"
         >
           Estado
-          <SortedIcon isSorted = {column.getIsSorted()} />
+          <SortedIcon isSorted={column.getIsSorted()} />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
       const variantMap = {
         pending: "secondary",
-        processing:"secondary",
+        processing: "secondary",
         success: "success",
         failed: "destructive",
       };
@@ -87,9 +108,9 @@ export const columns: ColumnDef<Payment>[] = [
           className="w-full"
         >
           Precio
-          <SortedIcon isSorted = {column.getIsSorted()} />
+          <SortedIcon isSorted={column.getIsSorted()} />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
@@ -111,14 +132,14 @@ export const columns: ColumnDef<Payment>[] = [
           className="w-full"
         >
           Email
-          <SortedIcon isSorted = {column.getIsSorted()} />
+          <SortedIcon isSorted={column.getIsSorted()} />
         </Button>
-      )
+      );
     },
   },
   {
     id: "actions",
-    header: 'Acciones',
+    header: "Acciones",
     cell: ({ row }) => {
       const payment = row.original;
 
@@ -135,10 +156,10 @@ export const columns: ColumnDef<Payment>[] = [
             <DropdownMenuItem
               onClick={() => {
                 navigator.clipboard.writeText(payment.id);
-                toast.success("Payment ID copied to clipboard",{
+                toast.success("Payment ID copied to clipboard", {
                   description: `El ID es: ${payment.id}`,
-                  position: 'top-right'
-                })
+                  position: "top-right",
+                });
               }}
             >
               Copy payment ID
