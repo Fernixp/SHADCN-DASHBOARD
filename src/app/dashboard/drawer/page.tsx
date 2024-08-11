@@ -40,7 +40,7 @@ export default function SidebarWithSubmenus({
             id="toggleSidebarMobile"
             aria-expanded="true"
             aria-controls="sidebar"
-            className="lg:hidden mr-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 rounded"
+            className="lg:hidden mr-2 text-[hsl(var(--foreground))] dark:text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] dark:hover:text-[hsl(var(--foreground))] cursor-pointer p-2 hover:bg-[hsl(var(--secondary))] dark:hover:bg-[hsl(var(--muted))] focus:bg-[hsl(var(--secondary))] dark:focus:bg-[hsl(var(--muted))] focus:ring-2 focus:ring-[hsl(var(--secondary))] dark:focus:ring-[hsl(var(--muted))] rounded"
             onClick={() => {
               setOpen(true);
             }}
@@ -73,22 +73,24 @@ export default function SidebarWithSubmenus({
             </svg>
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="dark:bg-black flex flex-col rounded-t-[10px] h-full w-[240px] mt-24 fixed bottom-0 right-0 overflow-y-auto">
-          <DrawerTitle className="font-medium mb-4 text-center bg-transparent ">Menu Principal</DrawerTitle>
+        <DrawerContent className="dark:bg-[hsl(var(--background))] flex flex-col rounded-t-[10px] h-full w-[240px] mt-24 fixed bottom-0 right-0 overflow-y-auto">
+          <DrawerTitle className="font-medium mb-4 text-center bg-transparent">
+            Menu Principal
+          </DrawerTitle>
           <div
             id="sidebar-mobile"
-            className="z-21 transition-width duration-75 bg-black dark:border-gray-700"
+            className="z-21 transition-width duration-75 bg-[hsl(var(--background))] dark:border-[hsl(var(--border))]"
             aria-label="Sidebar"
           >
-            <div className="relative flex-1 flex flex-col min-h-0 borderR border-gray-200 dark:border-gray-700 bg-white dark:bg-black pt-0 ">
+            <div className="relative flex-1 flex flex-col min-h-0 border-r border-[hsl(var(--border))] bg-[hsl(var(--background))] dark:bg-[hsl(var(--background))] pt-0 ">
               <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                <div className="flex-1 px-3 bg-white dark:bg-black divide-y divide-gray-200 dark:divide-gray-700 space-y-1">
+                <div className="flex-1 px-3 bg-[hsl(var(--background))] dark:bg-[hsl(var(--background))] divide-y divide-[hsl(var(--border))] space-y-1">
                   <ul className="space-y-2 pb-2">
                     {links.map((link) => (
                       <li key={link.href}>
                         <Link
                           href={link.href}
-                          className="text-base capitalize text-gray-900 dark:text-gray-200 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                          className="text-base capitalize text-[hsl(var(--foreground))] dark:text-[hsl(var(--card-foreground))] font-normal rounded-lg flex items-center p-2 hover:bg-[hsl(var(--card))] dark:hover:bg-[hsl(var(--muted))] group"
                           onClick={handleLinkClick} // Cierra el Drawer al hacer clic
                         >
                           <span className="ml-3">{link.name}</span>
