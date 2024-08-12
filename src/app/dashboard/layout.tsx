@@ -47,20 +47,29 @@ const links = [
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean | null>(null);
 
   useEffect(() => {
     // Este código solo se ejecuta en el cliente
     const savedState = localStorage.getItem("isCollapsed");
     if (savedState !== null) {
       setIsCollapsed(JSON.parse(savedState));
+    } else {
+      setIsCollapsed(false); // Estado por defecto si no existe en localStorage
     }
   }, []);
 
   useEffect(() => {
-    // Guardar el estado en localStorage cuando cambie
-    localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
+    // Guardar el estado en localStorage cuando cambie, pero solo si no es null
+    if (isCollapsed !== null) {
+      localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
+    }
   }, [isCollapsed]);
+
+  if (isCollapsed === null) {
+    // Puedes mostrar un loader o devolver null hasta que el estado se establezca
+    return null;
+  }
 
   return (
     <>

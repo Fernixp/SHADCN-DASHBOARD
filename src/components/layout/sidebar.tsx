@@ -18,7 +18,7 @@ interface SidebarWithSubmenusProps {
   isMobile?: boolean;
   handleLinkClick?: (link: any) => void;
   isCollapsed?: boolean;
-  setIsCollapsed?: Dispatch<SetStateAction<boolean>>;
+  setIsCollapsed?: Dispatch<SetStateAction<boolean | null>>;
 }
 
 function Sidebar({
