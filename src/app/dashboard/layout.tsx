@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ModeToggle from "./theme/page";
 import SidebarMobile from "@/components/layout/sidebar-mobile";
 import { Component, FileText, Home, Settings, Tag, User } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Sidebar from "@/components/layout/sidebar";
 
 const links = [
@@ -47,11 +47,26 @@ const links = [
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    // Este código solo se ejecuta en el cliente
+    const savedState = localStorage.getItem("isCollapsed");
+    if (savedState !== null) {
+      setIsCollapsed(JSON.parse(savedState));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Guardar el estado en localStorage cuando cambie
+    localStorage.setItem("isCollapsed", JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
+
   return (
     <>
       <nav className="bg-[hsl(var(--background))] border-b border-[hsl(var(--border))] fixed z-30 w-full">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between ">
             <div className="flex items-center justify-start">
               <SidebarMobile links={links} />
               <a
@@ -106,15 +121,20 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </nav>
-      <div className="flex overflow-hidden bg-[hsl(var(--background))] pt-16">
-        <Sidebar links={links} />
+      <div className="flex bg-[hsl(var(--background))] pt-16 ">
+        <Sidebar
+          links={links}
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
         <div
           className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
           id="sidebarBackdrop"
         ></div>
         <div
           id="main-content"
-          className="h-full w-full bg-[hsl(var(--background))] relative overflow-y-auto lg:ml-64"
+          className={`h-full w-full bg-[hsl(var(--background))] relative overflow-y-auto overflow-hidden
+            ${isCollapsed ? "lg:ml-14" : "lg:ml-64"}`}
         >
           <main>
             <div className="pt-6 px-4">
