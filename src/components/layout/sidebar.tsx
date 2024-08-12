@@ -2,7 +2,7 @@
 import { ChevronRight, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-
+import { usePathname } from 'next/navigation'
 interface SubmenuProps {
   name: string;
   href: string;
@@ -24,11 +24,11 @@ function Sidebar({
   handleLinkClick,
 }: SidebarWithSubmenusProps) {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-
+  const router = usePathname()
   const handleMenuClick = (menuName: string) => {
     setOpenSubmenu(openSubmenu === menuName ? null : menuName);
   };
-
+  
   return (
     <aside
       id="sidebar"
@@ -48,6 +48,8 @@ function Sidebar({
                   <div
                     className={`flex justify-between items-center cursor-pointer hover:bg-[hsl(var(--muted))] px-3 ${
                       link.submenu ? "relative" : ""
+                    } ${
+                      router.includes(link.href) ? 'bg-[hsl(var(--muted))]' : ''
                     }`}
                     onClick={() => link.submenu && handleMenuClick(link.name)}
                   >
@@ -79,7 +81,10 @@ function Sidebar({
                         <li key={sublink.href}>
                           <Link
                             href={sublink.href}
-                            className="text-sm text-[hsl(var(--foreground))] font-normal rounded-lg flex items-center p-2 hover:bg-[hsl(var(--muted))] group"
+                            className={`text-sm text-[hsl(var(--foreground))] 
+                              font-normal rounded-lg flex items-center p-2 hover:bg-[hsl(var(--muted))] group ${
+                              router.includes(sublink.href) ? 'bg-[hsl(var(--muted))]' : ''
+                            }`}
                             onClick={() => {
                               if (handleLinkClick) {
                                 handleLinkClick(sublink);
