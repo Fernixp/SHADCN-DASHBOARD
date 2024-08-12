@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ModeToggle from "./theme/page";
+import ModeToggle from "@/components/layout/theme-icon"; 
 import SidebarMobile from "@/components/layout/sidebar-mobile";
 import { Component, FileText, Home, Settings, Tag, User } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
