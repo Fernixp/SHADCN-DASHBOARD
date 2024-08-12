@@ -1,36 +1,43 @@
 "use client";
-import * as React from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { LucideIcon } from "lucide-react";
 
-interface SidebarWithSubmenusProps {
-  links: { name: string; href: string }[];
-}
-
-import dynamic from "next/dynamic";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
-  DrawerOverlay,
-  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
+import Sidebar from "@/components/layout/sidebar";
+interface SubmenuProps {
+  name: string;
+  href: string;
+}
+interface SidebarWithSubmenusProps {
+  links: {
+    name: string;
+    href: string;
+    icon: LucideIcon;
+    submenu?: Array<SubmenuProps>;
+  }[];
+}
 
-export default function SidebarWithSubmenus({
+export default function SidebarMobile({
   links,
 }: SidebarWithSubmenusProps) {
   // Estado para controlar la visibilidad del Drawer
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   // Maneja el cierre del Drawer
-  const handleLinkClick = () => {
-    setOpen(false);
-  };
+  const handleLinkClick = (link: any) => {
 
+    if (!link.submenu) {
+      setOpen(false);
+    }
+  };
+ 
   return (
     <div>
       <Drawer direction="left" open={open} onOpenChange={setOpen}>
@@ -73,35 +80,16 @@ export default function SidebarWithSubmenus({
             </svg>
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="dark:bg-[hsl(var(--background))] flex flex-col rounded-t-[10px] h-full w-[240px] mt-24 fixed bottom-0 right-0 overflow-y-auto">
-          <DrawerTitle className="font-medium mb-4 text-center bg-transparent">
-            Menu Principal
+        <DrawerContent
+          className="dark:bg-[hsl(var(--background))] flex flex-col rounded-t-[10px] h-full w-[240px] mt-24 fixed bottom-0 right-0 overflow-y-auto"
+        >
+          <DrawerTitle className="font-medium text-center bg-transparent">
+            Administrador
           </DrawerTitle>
-          <div
-            id="sidebar-mobile"
-            className="z-21 transition-width duration-75 bg-[hsl(var(--background))] dark:border-[hsl(var(--border))]"
-            aria-label="Sidebar"
-          >
-            <div className="relative flex-1 flex flex-col min-h-0 border-r border-[hsl(var(--border))] bg-[hsl(var(--background))] dark:bg-[hsl(var(--background))] pt-0 ">
-              <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                <div className="flex-1 px-3 bg-[hsl(var(--background))] dark:bg-[hsl(var(--background))] divide-y divide-[hsl(var(--border))] space-y-1">
-                  <ul className="space-y-2 pb-2">
-                    {links.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-base capitalize text-[hsl(var(--foreground))] dark:text-[hsl(var(--card-foreground))] font-normal rounded-lg flex items-center p-2 hover:bg-[hsl(var(--card))] dark:hover:bg-[hsl(var(--muted))] group"
-                          onClick={handleLinkClick} // Cierra el Drawer al hacer clic
-                        >
-                          <span className="ml-3">{link.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DrawerDescription className="sr-only">
+            Menú principal
+          </DrawerDescription>
+          <Sidebar links={links} isMobile handleLinkClick={handleLinkClick} />
         </DrawerContent>
       </Drawer>
     </div>

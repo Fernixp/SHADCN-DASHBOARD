@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-export function BadgeDemo() {
+export default function Page() {
   return (
     <div className="grid grid-cols-4 gap-4 text-">
       <Badge variant={"default"}>Badge</Badge>
@@ -11,5 +11,3 @@ export function BadgeDemo() {
     </div>
   );
 }
-
-export default BadgeDemo;
