@@ -2,16 +2,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ModeToggle from "@/components/layout/theme-icon"; 
 import SidebarMobile from "@/components/layout/sidebar-mobile";
-import { Component, FileText, Home, Settings, Tag, User } from "lucide-react";
+import { ChartColumnStacked, Component, FileText, Home, Settings, Tag, User } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import Sidebar from "@/components/layout/sidebar";
 
 const links = [
   { name: "dashboard", href: "home", icon: Home },
   { name: "usuarios", href: "usuarios", icon: User },
-  { name: "posts", href: "post", icon: FileText },
+  { name: "posts", href: "posts", icon: FileText },
   { name: "tags", href: "tags", icon: Tag },
-  { name: "theme", href: "theme", icon: Settings },
+  { name: "categorias", href: "categorias", icon: ChartColumnStacked},
   {
     name: "componentes",
     href: "#",
@@ -44,6 +44,8 @@ const links = [
       { name: "theme", href: "theme" },
     ],
   },
+
+  { name: "theme", href: "theme", icon: Settings },
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
