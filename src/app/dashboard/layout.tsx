@@ -143,7 +143,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <div
           id="main-content"
           className={`h-full w-full bg-[hsl(var(--background))] relative overflow-y-auto overflow-hidden
-            ${isCollapsed ? "lg:ml-14" : "lg:ml-64"}`}
+            ${isCollapsed ? "lg:ml-14" : "lg:ml-56"}`}
         >
           <main>
             <div className="pt-6 px-4">

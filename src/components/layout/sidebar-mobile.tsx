@@ -81,7 +81,7 @@ export default function SidebarMobile({
           </Button>
         </DrawerTrigger>
         <DrawerContent
-          className="dark:bg-[hsl(var(--background))] flex flex-col rounded-t-[10px] h-full w-[260px] mt-24 fixed bottom-0 right-0 overflow-y-auto"
+          className="dark:bg-[hsl(var(--background))] flex flex-col rounded-t-[10px] h-full w-[226px] mt-24 fixed bottom-0 right-0 overflow-y-auto"
         >
           <DrawerTitle className="font-medium text-center bg-transparent">
             Administrador
