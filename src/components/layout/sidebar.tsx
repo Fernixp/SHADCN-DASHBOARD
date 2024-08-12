@@ -43,7 +43,7 @@ function Sidebar({
           ? "z-21 transition-width duration-75 bg-[hsl(var(--background))]"
           : "fixed hidden z-20 h-full top-0 left-0 pt-16 lg:flex flex-shrink-0 flex-col transition-width duration-300 border-r border-gray-300 dark:border-gray-800"
       } dark:bg-black dark:border-[hsl(var(--border))] ${
-        isCollapsed ? " w-14" : " w-64"
+        isCollapsed ? " w-[54px]" : " w-56"
       }`}
       aria-label="Sidebar"
     >
@@ -53,35 +53,46 @@ function Sidebar({
             <ul className="space-y-2 pb-2">
               {links.map((link) => (
                 <li key={link.href}>
-                  <div
-                    className={`flex justify-between items-center cursor-pointer hover:bg-[hsl(var(--muted))] px-1.5 py-1 ${
-                      link.submenu ? "relative" : ""
-                    } ${
-                      router.includes(link.href) ? "bg-[hsl(var(--muted))]" : ""
-                    } ${isCollapsed ? 'rounded-xl': ''}`}
-                    onClick={() => link.submenu && handleMenuClick(link.name)}
+                  <Link
+                    href={link.href}
+                    onClick={() => {
+                      if (handleLinkClick) {
+                        handleLinkClick(link);
+                      }
+                    }}
                   >
-                    <Link
-                      href={link.href}
-                      className={`text-base capitalize text-[hsl(var(--foreground))] font-normal rounded-lg flex items-center p-[10px]  group ${
-                        link.submenu ? "pr-10" : ""
-                      }`}
-                      onClick={() => {
-                        if (handleLinkClick) {
-                          handleLinkClick(link);
-                        }
-                      }}
+                    <div
+                      className={`flex justify-between items-center cursor-pointer hover:bg-slate-200 dark:hover:bg-[hsl(var(--muted))] px-1.5 py-1 ${
+                        link.submenu ? "relative" : ""
+                      } ${
+                        router.includes(link.href)
+                          ? "dark:bg-[hsl(var(--muted))]  bg-slate-200"
+                          : ""
+                      } ${isCollapsed ? "rounded-xl" : ""}`}
+                      onClick={() => link.submenu && handleMenuClick(link.name)}
                     >
-                      <link.icon height={20} />
-                      <span className={`${isCollapsed ? 'ml-[16px]':'ml-3'}`}>{link.name}</span>
-                    </Link>
-                    {/* Mostrar flecha de despliegue solo si hay submenu */}
-                    {link.submenu && (
-                      <ChevronRight
-                        className={openSubmenu === link.name ? "rotate-90" : ""}
-                      />
-                    )}
-                  </div>
+                      <div
+                        className={`text-sm capitalize text-[hsl(var(--foreground))] font-semibold rounded-lg flex items-center p-[10px]  group ${
+                          link.submenu ? "pr-10" : ""
+                        }`}
+                      >
+                        <link.icon size={22} />
+                        <span
+                          className={`${isCollapsed ? "ml-[16px]" : "ml-3"}`}
+                        >
+                          {link.name}
+                        </span>
+                      </div>
+                      {/* Mostrar flecha de despliegue solo si hay submenu */}
+                      {link.submenu && (
+                        <ChevronRight
+                          className={
+                            openSubmenu === link.name ? "rotate-90" : ""
+                          }
+                        />
+                      )}
+                    </div>
+                  </Link>
                   {/* Renderiza el submenu si está abierto */}
                   {link.submenu && openSubmenu === link.name && (
                     <ul className="ml-6 mt-1 space-y-1">
@@ -113,15 +124,16 @@ function Sidebar({
           </div>
         </div>
       </div>
-      <Button
+      {!isMobile && (
+        <Button
         size="icon"
         variant="outline"
         className={`absolute -right-5 top-1/2 z-50 rounded-full md:inline-flex ${
           isMobile ? "hidden" : ""
         }`}
         onClick={() => {
-          if(setIsCollapsed){
-            setIsCollapsed((prev) => !prev)
+          if (setIsCollapsed) {
+            setIsCollapsed((prev) => !prev);
           }
         }}
       >
@@ -129,6 +141,7 @@ function Sidebar({
           className={`h-5 w-5 ${isCollapsed ? "rotate-180" : ""}`}
         />
       </Button>
+      )}
     </aside>
   );
 }
