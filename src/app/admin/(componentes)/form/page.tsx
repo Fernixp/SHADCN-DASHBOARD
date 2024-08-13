@@ -16,10 +16,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const userSchema = z.object({
   username: z.string().min(1, { message: "El campo es requerido" }).max(20),
   email: z.string().min(1, { message: "El email es requerido" }).email(),
+  type: z.enum(["todos", "menciones", "ninguno"], {
+    required_error: "Necesitas seleccionar un tipo de notificación.",
+  }),
 });
 
 export default function Page() {
@@ -39,11 +43,13 @@ export default function Page() {
     console.log("✅ This will be type-safe and validated.");
     console.log(values);
   }
-
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-2 gap-4"
+        >
           <FormField
             control={form.control}
             name="username"
@@ -65,6 +71,47 @@ export default function Page() {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input placeholder="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Radio group */}
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>Notificame sobre...</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="todos" />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        Todos los nuevos mensajes
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="menciones" />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        Mensajes directos y menciones
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="ninguno" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Ninguno</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>
