@@ -1,6 +1,6 @@
 "use client";
+import { zod as z } from "@/config/es-zod";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/form";
 
 const userSchema = z.object({
-  username: z.string().min(2).max(20),
+  username: z.string().min(1, { message: "El campo es requerido" }).max(20),
+  email: z.string().min(1, { message: "El email es requerido" }).email(),
 });
 
 export default function Page() {
@@ -27,6 +28,7 @@ export default function Page() {
     resolver: zodResolver(userSchema),
     defaultValues: {
       username: "",
+      email: "",
     },
   });
 
@@ -41,7 +43,7 @@ export default function Page() {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="username"
@@ -51,9 +53,19 @@ export default function Page() {
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="email" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
