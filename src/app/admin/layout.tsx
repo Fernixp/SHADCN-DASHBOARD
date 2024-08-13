@@ -43,6 +43,7 @@ const links = [
       { name: "data table", href: "data-table" },
       { name: "theme", href: "theme" },
       { name: "form", href: "form" },
+      { name: "date picker", href: "date-picker" },
     ],
   },
 
