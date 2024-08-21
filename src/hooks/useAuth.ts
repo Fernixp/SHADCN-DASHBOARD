@@ -1,37 +1,13 @@
-import { isAxiosError } from "axios";
-import api from "@/config/axios";
-import { userSchema } from "@/types";
-interface DataType {
-  email: string;
-  password: string;
-}
+import { useQuery } from '@tanstack/react-query'
+import { getUser } from '@/lib/auth-api'
 
-export async function login(datos: DataType) {
-  try {
-    const { data } = await api.post("/api/login", datos);
-    localStorage.setItem("AUTH_TOKEN", data.token);
-    return data;
-    //
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      const errorMessage =
-        error.response.data.errors?.invalid?.[0] || "Error desconocido";
-      throw new Error(errorMessage);
-    }
-    throw new Error("An unknown error occurred");
-  }
-}
+export const useAuth = () => {
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+    retry: 1,
+    refetchOnWindowFocus: false
+  })
 
-export async function getUser() {
-  try {
-    const { data } = await api.get("/api/user");
-    const response = userSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
-  } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error);
-    }
-  }
+  return { data, isError, isLoading }
 }
