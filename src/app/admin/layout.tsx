@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import Loading from "@/components/custom/loading";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
-
+import { AuthProvider } from "@/app/(providers)/AuthContext";
 const links = [
   { name: "dashboard", href: "home", icon: Home },
   { name: "usuarios", href: "usuarios", icon: User },
@@ -65,12 +65,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { data, isError, isLoading } = useAuth();
 
   useEffect(() => {
-    if ( data) {
+    if (data) {
       router.push("/admin");
-    } else if ( isError) {
+    } else if (isError) {
       router.push("/login");
     }
-    
   }, [data, isError, isLoading, router]);
   const [isCollapsed, setIsCollapsed] = useState<boolean | null>(null);
 
@@ -98,39 +97,42 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {data ? (
-        <>
-         <Navbar links={links}/>
-          <div className="flex bg-[hsl(var(--background))] pt-16 ">
-            <Sidebar
-              links={links}
-              isCollapsed={isCollapsed}
-              setIsCollapsed={setIsCollapsed}
-            />
-            <div
-              className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
-              id="sidebarBackdrop"
-            ></div>
-            <div
-              id="main-content"
-              className={`h-full w-full bg-[hsl(var(--background))] relative overflow-y-auto overflow-hidden
+      <AuthProvider>
+        {data ? (
+          <>
+            <Navbar links={links} />
+            <div className="flex bg-[hsl(var(--background))] pt-16 ">
+              <Sidebar
+                links={links}
+                isCollapsed={isCollapsed}
+                setIsCollapsed={setIsCollapsed}
+              />
+              <div
+                className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
+                id="sidebarBackdrop"
+              ></div>
+              <div
+                id="main-content"
+                className={`h-full w-full bg-[hsl(var(--background))] relative overflow-y-auto overflow-hidden
             ${isCollapsed ? "lg:ml-14" : "lg:ml-56"}`}
-            >
-              <main>
-                <div className="pt-6 px-4">
-                  <div className="w-full min-h-[calc(100vh-230px)]">
-                    <div className="bg-[hsl(var(--card))] shadow rounded-lg p-4 sm:p-6 xl:p-8">
-                      {children}
+              >
+                <main>
+                  <div className="pt-6 px-4">
+                    <div className="w-full min-h-[calc(100vh-230px)]">
+                      <div className="bg-[hsl(var(--card))] shadow rounded-lg p-4 sm:p-6 xl:p-8">
+                        {children}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </main>
-              <Footer/>
+                </main>
+                <Footer />
+              </div>
             </div>
-          </div>
-        </>
-      ) : <Loading/>
-    }
+          </>
+        ) : (
+          <Loading />
+        )}
+      </AuthProvider>
     </>
   );
 }
