@@ -1,7 +1,5 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ModeToggle from "@/components/layout/theme-icon";
-import SidebarMobile from "@/components/layout/sidebar-mobile";
+
 import {
   ChartColumnStacked,
   Component,
@@ -16,6 +14,8 @@ import Sidebar from "@/components/layout/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/custom/loading";
+import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 
 const links = [
   { name: "dashboard", href: "home", icon: Home },
@@ -57,7 +57,6 @@ const links = [
       { name: "date picker", href: "date-picker" },
     ],
   },
-
   { name: "theme", href: "theme", icon: Settings },
 ];
 
@@ -66,11 +65,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { data, isError, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading && data) {
+    if ( data) {
       router.push("/admin");
-    } else if (!isLoading && isError) {
+    } else if ( isError) {
       router.push("/login");
     }
+    
   }, [data, isError, isLoading, router]);
   const [isCollapsed, setIsCollapsed] = useState<boolean | null>(null);
 
@@ -96,71 +96,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     return null;
   }
 
-  if(isLoading){
-    return <Loading/>
-  }
-
   return (
     <>
-      {data && (
+      {data ? (
         <>
-          <nav className="bg-[hsl(var(--background))] border-b border-[hsl(var(--border))] fixed z-30 w-full">
-            <div className="px-3 py-3 lg:px-5 lg:pl-3">
-              <div className="flex items-center justify-between ">
-                <div className="flex items-center justify-start">
-                  <SidebarMobile links={links} />
-                  <a
-                    href="#"
-                    className="text-xl font-bold flex items-center lg:ml-2.5"
-                  >
-                    {/* Logo */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 256 256"
-                      className="h-6 w-6"
-                    >
-                      <rect width="256" height="256" fill="none"></rect>
-                      <line
-                        x1="208"
-                        y1="128"
-                        x2="128"
-                        y2="208"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="16"
-                      ></line>
-                      <line
-                        x1="192"
-                        y1="40"
-                        x2="40"
-                        y2="192"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="16"
-                      ></line>
-                    </svg>
-                    <span className="self-center whitespace-nowrap ml-2 text-[hsl(var(--foreground))]">
-                      {" "}
-                      Shadcn/ui
-                    </span>
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  {/* Theme */}
-                  <ModeToggle />
-                  {/* User Avatar */}
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>FP</AvatarFallback>
-                  </Avatar>
-                </div>
-              </div>
-            </div>
-          </nav>
+         <Navbar links={links}/>
           <div className="flex bg-[hsl(var(--background))] pt-16 ">
             <Sidebar
               links={links}
@@ -185,53 +125,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   </div>
                 </div>
               </main>
-              <footer className="bg-[hsl(var(--background))] border-t border-[hsl(var(--border))] md:flex md:items-center md:justify-between shadow rounded-lg p-4 md:p-6 xl:p-8 my-6 mx-4">
-                <ul className="flex items-center flex-wrap mb-6 md:mb-0">
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm font-normal text-gray-500 dark:text-gray-400 hover:underline mr-4 md:mr-6"
-                    >
-                      Terms and conditions
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm font-normal text-gray-500 dark:text-gray-400 hover:underline mr-4 md:mr-6"
-                    >
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm font-normal text-gray-500 dark:text-gray-400 hover:underline mr-4 md:mr-6"
-                    >
-                      License
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-sm font-normal text-gray-500 dark:text-gray-400 hover:underline mr-4 md:mr-6"
-                    >
-                      Cookie Policy
-                    </a>
-                  </li>
-                </ul>
-                <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                  © 2024{" "}
-                  <a href="#" className="hover:underline">
-                    Shadcn/ui™
-                  </a>
-                  . All rights reserved.
-                </div>
-              </footer>
+              <Footer/>
             </div>
           </div>
         </>
-      )}
+      ) : <Loading/>
+    }
     </>
   );
 }
