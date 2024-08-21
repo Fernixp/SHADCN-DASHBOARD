@@ -19,7 +19,7 @@ import { Card } from "@/components/ui/card";
 import { authSchema } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { login } from "@/hooks/useAuth";
+import { login } from "@/lib/auth-api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -57,13 +57,7 @@ export default function Login() {
   function onSubmit(data: z.infer<typeof authSchema>) {
     // Do something with the form values.
     mutate(data);
-    console.log("✅ This will be type-safe and validated.");
   }
-  useEffect(()=>{
-    console.log('=============BIENVENIDO=============');
-    console.log(datos);
-    console.log('====================================');
-  },[datos])
   return (
     <div className="container grid h-svh flex-col items-center justify-center bg-primary-foreground lg:max-w-none lg:px-0">
       <div className="mx-auto flex w-full flex-col justify-center space-y-2 sm:w-[480px] lg:p-8">

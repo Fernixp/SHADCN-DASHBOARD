@@ -3,7 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import ClientProviders from "./client-provider";
+import ClientProvider from "./(providers)/client-provider";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 const fontSans = FontSans({
@@ -28,16 +28,18 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ClientProviders>{children}</ClientProviders>
-        </ThemeProvider>
-        <SonnerToaster richColors />
-        <Toaster />
+        <ClientProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+            <SonnerToaster richColors />
+            <Toaster />
+        </ClientProvider>
       </body>
     </html>
   );
